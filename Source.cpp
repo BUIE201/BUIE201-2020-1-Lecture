@@ -66,4 +66,29 @@ void main()
 	end = std::chrono::system_clock::now();
 	elapsed = end - start;
 	cout << " Elapsed Time: " << elapsed.count() << endl;
+
+	vector<int> largev;
+	largev.reserve(10000);
+	for (int i = 0; i < 10000; i++)
+	{
+		largev.push_back(i);
+	}
+
+	start = chrono::system_clock::now();
+	cout << " largev FindSimpleWithIndexedForLoop found: " << FindSimpleWithIndexedForLoop(largev, 9999);
+	end = std::chrono::system_clock::now();
+	elapsed = end - start;
+	cout << " Elapsed Time: " << elapsed.count() << endl;
+
+	start = chrono::system_clock::now();
+	cout << " largev FindSimpleWithRangeForLoop found: " << FindSimpleWithRangeForLoop(largev, 9999);
+	end = std::chrono::system_clock::now();
+	elapsed = end - start;
+	cout << " Elapsed Time: " << elapsed.count() << endl;
+
+	start = chrono::system_clock::now();
+	cout << " largev FindBinarySearch found: " << FindBinarySearch(largev, 9999, 0, largev.size() - 1);
+	end = std::chrono::system_clock::now();
+	elapsed = end - start;
+	cout << " Elapsed Time: " << elapsed.count() << endl;
 }
