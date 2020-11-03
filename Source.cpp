@@ -13,8 +13,26 @@ int FindSimpleWithIndexedForLoop(vector<int>& v, int ValueToFind)
 	return -1;
 }
 
+// [return type or void] [function name] ( optional list of parameters)
+void f()
+{
+	cout << "f";
+}
+
+int g(int x)
+{
+	return x + 1;
+}
+
+
+
 void main()
 {
-	vector<int> v = { 1, 3, 5, 8, 11, 15 };
-	cout << " FindSimpleWithIndexedForLoop found: " << FindSimpleWithIndexedForLoop(v, 17);
+	f();
+	cout << g(5);
+
+	cout << sizeof(int) << " " << sizeof(double) << " " << sizeof(long long);
+
+	//vector<int> v = { 1, 3, 5, 8, 11, 15 };
+	//cout << " FindSimpleWithIndexedForLoop found: " << FindSimpleWithIndexedForLoop(v, 17);
 }
