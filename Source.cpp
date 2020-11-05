@@ -6,7 +6,8 @@ using namespace std;
 
 int FindSimpleWithIndexedForLoop(vector<int>& v, int ValueToFind)
 {
-	for (int j = 0; j < v.size(); j++)
+	int n = v.size();
+	for (int j = 0; j < n; j++)
 	{
 		if (v[j] == ValueToFind)
 			return j;
@@ -68,26 +69,26 @@ void main()
 	cout << " Elapsed Time: " << elapsed.count() << endl;
 
 	vector<int> largev;
-	largev.reserve(10000);
-	for (int i = 0; i < 10000; i++)
+	largev.reserve(1000);
+	for (int i = 0; i < 1000; i++)
 	{
 		largev.push_back(i);
 	}
 
 	start = chrono::system_clock::now();
-	cout << " largev FindSimpleWithIndexedForLoop found: " << FindSimpleWithIndexedForLoop(largev, 9999);
+	cout << " largev FindSimpleWithIndexedForLoop found: " << FindSimpleWithIndexedForLoop(largev, largev.size() - 1);
 	end = std::chrono::system_clock::now();
 	elapsed = end - start;
 	cout << " Elapsed Time: " << elapsed.count() << endl;
 
 	start = chrono::system_clock::now();
-	cout << " largev FindSimpleWithRangeForLoop found: " << FindSimpleWithRangeForLoop(largev, 9999);
+	cout << " largev FindSimpleWithRangeForLoop found: " << FindSimpleWithRangeForLoop(largev, largev.size() - 1);
 	end = std::chrono::system_clock::now();
 	elapsed = end - start;
 	cout << " Elapsed Time: " << elapsed.count() << endl;
 
 	start = chrono::system_clock::now();
-	cout << " largev FindBinarySearch found: " << FindBinarySearch(largev, 9999, 0, largev.size() - 1);
+	cout << " largev FindBinarySearch found: " << FindBinarySearch(largev, largev.size() - 1, 0, largev.size() - 1);
 	end = std::chrono::system_clock::now();
 	elapsed = end - start;
 	cout << " Elapsed Time: " << elapsed.count() << endl;
