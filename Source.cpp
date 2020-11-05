@@ -1,94 +1,80 @@
 #include <iostream>
 #include <vector>
-#include <chrono>
 
 using namespace std;
 
-int FindSimpleWithIndexedForLoop(vector<int>& v, int ValueToFind)
+class STACK
 {
-	for (int j = 0; j < v.size(); j++)
+	vector<int> Data;
+	unsigned int TopIndex;
+
+public:
+	STACK(int EndIndicator) : TopIndex(0)
 	{
-		if (v[j] == ValueToFind)
-			return j;
+		Data.push_back(EndIndicator);
 	}
-	return -1;
-}
-
-int FindSimpleWithRangeForLoop(vector<int>& v, int ValueToFind)
-{
-	int i = 0;
-	for (int x : v)
+	~STACK()
 	{
-		if (x == ValueToFind)
-			return i;
-		i++;
+		if (IsEmpty())
+			cout << "Stack is empty at destruction." << endl;
+		else
+			cout << "Stack has " << Data.size() - 1 << " objects at destruction." << endl;
+		Data.clear();
 	}
-	return -1;
-}
-
-int FindBinarySearch(vector<int>& v, int ValueToFind, int StartIndex, int EndIndex)
-{
-	if (EndIndex < StartIndex)
-		return -1;
-
-	int mid = (EndIndex + StartIndex) / 2;
-
-	if (v[mid] == ValueToFind)
-		return mid;
-
-	if (v[mid] > ValueToFind)
-		return FindBinarySearch(v, ValueToFind, StartIndex, mid - 1);
-
-	//if (v[mid] < ValueToFind)
-	return FindBinarySearch(v, ValueToFind, mid + 1, EndIndex);
-}
-
-
-void main()
-{
-	vector<int> v = { 1, 3, 5, 8, 11, 15 };
-
-
-	auto start = chrono::system_clock::now();
-	cout << " FindSimpleWithIndexedForLoop found: " << FindSimpleWithIndexedForLoop(v, 17);
-	auto end = std::chrono::system_clock::now();
-	auto elapsed = end - start;
-	cout << " Elapsed Time: " << elapsed.count() << endl;
-
-	start = chrono::system_clock::now();
-	cout << " FindSimpleWithRangeForLoop found: " << FindSimpleWithRangeForLoop(v, 17);
-	end = std::chrono::system_clock::now();
-	elapsed = end - start;
-	cout << " Elapsed Time: " << elapsed.count() << endl;
-
-	start = chrono::system_clock::now();
-	cout << " FindBinarySearch found: " << FindBinarySearch(v, 17, 0, v.size() - 1);
-	end = std::chrono::system_clock::now();
-	elapsed = end - start;
-	cout << " Elapsed Time: " << elapsed.count() << endl;
-
-	vector<int> largev;
-	largev.reserve(10000);
-	for (int i = 0; i < 10000; i++)
+	void Push(int x)
 	{
-		largev.push_back(i);
+		TopIndex++;
+		if (TopIndex < Data.size())
+			Data[TopIndex] = x;
+		else
+			Data.push_back(x);
 	}
+	int Pop()
+	{
+		if (TopIndex == 0)
+			return Data[TopIndex];
 
-	start = chrono::system_clock::now();
-	cout << " largev FindSimpleWithIndexedForLoop found: " << FindSimpleWithIndexedForLoop(largev, 9999);
-	end = std::chrono::system_clock::now();
-	elapsed = end - start;
-	cout << " Elapsed Time: " << elapsed.count() << endl;
+		return Data[TopIndex--];
+	}
+	bool IsEmpty() { return TopIndex == 0; }
+	void Print()
+	{
+		cout << endl;
+		cout << "=====" << endl;
+		if (IsEmpty())
+			cout << "Stack is empty." << endl;
+		else
+		{
+			for (int i = TopIndex; i > 0; i--)
+			{
+				cout << Data[i] << endl;
+			}
+		}
+		cout << "=====" << endl;
+	}
+};
 
-	start = chrono::system_clock::now();
-	cout << " largev FindSimpleWithRangeForLoop found: " << FindSimpleWithRangeForLoop(largev, 9999);
-	end = std::chrono::system_clock::now();
-	elapsed = end - start;
-	cout << " Elapsed Time: " << elapsed.count() << endl;
+int main()
+{
+	STACK s(99);
 
-	start = chrono::system_clock::now();
-	cout << " largev FindBinarySearch found: " << FindBinarySearch(largev, 9999, 0, largev.size() - 1);
-	end = std::chrono::system_clock::now();
-	elapsed = end - start;
-	cout << " Elapsed Time: " << elapsed.count() << endl;
+	int x;
+	while (true)
+	{
+		cin >> x;
+		if (x == 99)
+			break;
+		if (x == 999)
+		{
+			cout << endl << "Poped: " << s.Pop() << endl;
+			s.Print();
+		}
+		else
+		{
+			s.Push(x);
+			cout << endl << "Pushed: " << x << endl;
+			s.Print();
+		}
+	}
+	return 0;
 }
