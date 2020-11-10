@@ -1,80 +1,55 @@
 #include <iostream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
-class STACK
+int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int>& Distance, vector< vector<int>>& Successors)
 {
-	vector<int> Data;
-	unsigned int TopIndex;
+	// Simplified version of Bellman-Ford algorithm : Valid for DAGs with positive distances.
+	// No exception handling is implemented.
 
-public:
-	STACK(int EndIndicator) : TopIndex(0)
-	{
-		Data.push_back(EndIndicator);
-	}
-	~STACK()
-	{
-		if (IsEmpty())
-			cout << "Stack is empty at destruction." << endl;
-		else
-			cout << "Stack has " << Data.size() - 1 << " objects at destruction." << endl;
-		Data.clear();
-	}
-	void Push(int x)
-	{
-		TopIndex++;
-		if (TopIndex < Data.size())
-			Data[TopIndex] = x;
-		else
-			Data.push_back(x);
-	}
-	int Pop()
-	{
-		if (TopIndex == 0)
-			return Data[TopIndex];
+	if (FromNode == ToNode)
+		return 0;
 
-		return Data[TopIndex--];
-	}
-	bool IsEmpty() { return TopIndex == 0; }
-	void Print()
+	int MinDistance = -1;
+	for (int Node : Successors[FromNode])
 	{
-		cout << endl;
-		cout << "=====" << endl;
-		if (IsEmpty())
-			cout << "Stack is empty." << endl;
-		else
-		{
-			for (int i = TopIndex; i > 0; i--)
-			{
-				cout << Data[i] << endl;
-			}
-		}
-		cout << "=====" << endl;
+		auto d = Distance[{FromNode, Node}] + ShortestPathLength(Node, ToNode, Distance, Successors);
+
+		if (MinDistance < 0)
+			MinDistance = d;
+		else if (d < MinDistance)
+			MinDistance = d;
 	}
-};
+	return MinDistance;
+}
+
 
 int main()
 {
-	STACK s(99);
-
-	int x;
-	while (true)
+	map< pair<int, int>, int> Distance =
 	{
-		cin >> x;
-		if (x == 99)
-			break;
-		if (x == 999)
-		{
-			cout << endl << "Poped: " << s.Pop() << endl;
-			s.Print();
-		}
-		else
-		{
-			s.Push(x);
-			cout << endl << "Pushed: " << x << endl;
-			s.Print();
-		}
-	}
+		{{0, 1}, 5},
+		{{1, 2}, 4},
+		{{1, 3}, 2},
+		{{2, 3}, 5},
+		{{3, 4}, 4},
+		{{3, 5}, 2},
+		{{4, 5}, 1}
+	};
+	vector< vector<int>> Successors =
+	{
+		{1},
+		{2, 3},
+		{3},
+		{4, 5},
+		{5},
+		{}
+	};
+
+	auto d = ShortestPathLength(0, 5, Distance, Successors);
+	cout << d;
+
 	return 0;
 }
