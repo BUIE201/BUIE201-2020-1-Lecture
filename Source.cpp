@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int>& Distance, vector< vector<int>>& Successors)
+int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int >& Distance, vector< vector<int> >& Successors)
 {
 	// Simplified version of Bellman-Ford algorithm : Valid for DAGs with positive distances.
 	// No exception handling is implemented.
@@ -12,23 +12,23 @@ int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int>& Dist
 	if (FromNode == ToNode)
 		return 0;
 
-	int MinDistance = -1;
-	for (int Node : Successors[FromNode])
+	int MinLength = -1;
+	for (int SuccessorNode : Successors[FromNode])
 	{
-		auto d = Distance[{FromNode, Node}] + ShortestPathLength(Node, ToNode, Distance, Successors);
+		auto PL = Distance[{FromNode, SuccessorNode}] + ShortestPathLength(SuccessorNode, ToNode, Distance, Successors);
 
-		if (MinDistance < 0)
-			MinDistance = d;
-		else if (d < MinDistance)
-			MinDistance = d;
+		if (MinLength < 0)
+			MinLength = PL;
+		else if (PL < MinLength)
+			MinLength = PL;
 	}
-	return MinDistance;
+	return MinLength;
 }
 
 
 int main()
 {
-	map< pair<int, int>, int> Distance =
+	map< pair<int, int>, int > Distance =
 	{
 		{{0, 1}, 5},
 		{{1, 2}, 4},
@@ -38,7 +38,7 @@ int main()
 		{{3, 5}, 2},
 		{{4, 5}, 1}
 	};
-	vector< vector<int>> Successors =
+	vector< vector<int> > Successors =
 	{
 		{1},
 		{2, 3},
