@@ -30,6 +30,8 @@ int main()
 {
 	map< pair<int, int>, int > Distance =
 	{
+		// {fromnode, tonode}, distance
+
 		{{0, 1}, 5},
 		{{1, 2}, 4},
 		{{1, 3}, 2},
@@ -40,6 +42,8 @@ int main()
 	};
 	vector< vector<int> > Successors =
 	{
+		// vector of successor nodes
+
 		{1},
 		{2, 3},
 		{3},
