@@ -18,19 +18,19 @@ int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int >& Dis
 	int MinLength = -1;
 	for (int SuccessorNode : Successors[FromNode])
 	{
-		int PL = 0;
+		int dist = 0;
 		auto it = Distance.find({ SuccessorNode, ToNode });
 		if (it != Distance.end())
 		{
-			PL = Distance[{FromNode, SuccessorNode}] + it->second;
+			dist = it->second;
 		}
 		else
 		{
-			auto dist = ShortestPathLength(SuccessorNode, ToNode, Distance, Successors);
+			dist = ShortestPathLength(SuccessorNode, ToNode, Distance, Successors);
 			Distance.emplace(pair<int, int>(SuccessorNode, ToNode), dist);
-			PL = Distance[{FromNode, SuccessorNode}] + dist;
 		}
 
+		auto PL = Distance[{FromNode, SuccessorNode}] + dist;
 		if (MinLength < 0)
 			MinLength = PL;
 		else if (PL < MinLength)
