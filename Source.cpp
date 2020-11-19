@@ -4,41 +4,48 @@
 
 using namespace std;
 
-int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int >& Distance, vector< vector<int> >& Successors)
+int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int >& Distance, 
+	vector< vector<int> >& Successors, 
+	map< pair<int, int>, int >& Cache)
 {
 	// Simplified version of Bellman-Ford algorithm : Valid for DAGs with positive distances.
-	// No exception handling is implemented.
+	// Dynamic programming
 
 	if (FromNode == ToNode)
 		return 0;
 
-	if (Successors.empty())
+	if (Successors[FromNode].empty())
 		return INT_MAX;
 
-	int MinLength = -1;
+	int MinLength = INT_MAX;
 	for (int SuccessorNode : Successors[FromNode])
 	{
+		// memoization, cache
 		int dist = 0;
-		auto it = Distance.find({ SuccessorNode, ToNode });
-		if (it != Distance.end())
+		auto it = Cache.find({ SuccessorNode, ToNode });
+		if (it != Cache.end())
 		{
 			dist = it->second;
 		}
 		else
 		{
-			dist = ShortestPathLength(SuccessorNode, ToNode, Distance, Successors);
-			Distance.emplace(pair<int, int>(SuccessorNode, ToNode), dist);
+			dist = ShortestPathLength(SuccessorNode, ToNode, Distance, Successors, Cache);
+			Cache.emplace(pair<int, int>(SuccessorNode, ToNode), dist);
 		}
 
-		auto PL = Distance[{FromNode, SuccessorNode}] + dist;
-		if (MinLength < 0)
-			MinLength = PL;
-		else if (PL < MinLength)
-			MinLength = PL;
+		if (dist != INT_MAX)
+		{
+			auto PL = Distance[{FromNode, SuccessorNode}] + dist;
+			if (PL < MinLength)
+				MinLength = PL;
+		}
 	}
 	return MinLength;
 }
 
+void CreateSuccessorsFromDistanceMap(map< pair<int, int>, int >& Distance, vector< vector<int> >& Successors)
+{
+}
 
 int main()
 {
@@ -51,22 +58,25 @@ int main()
 		{{1, 3}, 2},
 		{{2, 3}, 5},
 		{{3, 4}, 4},
-		{{3, 5}, 2},
+		{{3, 5}, 200},
 		{{4, 5}, 1}
 	};
-	vector< vector<int> > Successors =
-	{
-		// vector of successor nodes
+	map< pair<int, int>, int > Cache;
 
-		{1},
-		{2, 3},
-		{3},
-		{4, 5},
-		{5},
-		{}
-	};
+	vector< vector<int> > Successors;
+	CreateSuccessorsFromDistanceMap(Distance, Successors);
+	//	=
+	//{
+	//	 vector of successor nodes
+	//	{1},
+	//	{2, 3},
+	//	{3},
+	//	{4, 5},
+	//	{5},
+	//	{}
+	//};
 
-	auto d = ShortestPathLength(0, 5, Distance, Successors);
+	auto d = ShortestPathLength(0, 5, Distance, Successors, Cache);
 	cout << d;
 
 	return 0;
