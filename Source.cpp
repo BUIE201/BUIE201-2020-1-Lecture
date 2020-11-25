@@ -136,7 +136,7 @@ int main()
 	Arc a5(&n3, &n5, 2, g);
 	Arc a6(&n4, &n5, 1, g);
 
-	int pathlength = n1.ShortestPathLength(&n5);
+	int pathlength = n0.ShortestPathLength(&n5);
 
 	return 1;
 }
