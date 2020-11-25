@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 //Forward declaration
 class Node;
 class Arc;
@@ -12,167 +11,133 @@ class Arc;
 class Graph
 {
 	vector<Node*> Nodes;
-	vector<Arc*> Arcs;
+	map<pair<Node*, Node*>, Arc*> Arcs;
 
 public:
-	int ShortestPathLength(Node& FromNode, Node& ToNode)
-	{
-	}
-
 	void AddNode(Node* p)
 	{
 		Nodes.push_back(p);
 	}
-	void AddArc(Arc* p)
+	void AddArc(Node* FromNode, Node* ToNode, Arc* p)
 	{
-		Arcs.push_back(p);
+		Arcs.emplace(make_pair(FromNode, ToNode), p);
+	}
+	Arc* GetArc(Node* FromNode, Node* ToNode)
+	{
+		auto it = Arcs.find({ FromNode, ToNode });
+		if (it == Arcs.end())
+			return nullptr;
+		return it->second;
 	}
 };
 
 class Node
 {
 	int ID;
+	vector<Node*> Successors;
+	map<Node*, int> Cache;
+	Graph* pG;
 
 public:
 	// Constructor
-	Node(int IDIn, Graph& g) : ID(IDIn)
+	Node(int IDIn, Graph& g) : ID(IDIn), pG(&g)
 	{
 		g.AddNode(this);
 	}
+	void AddSuccessor(Node* p)
+	{
+		Successors.push_back(p);
+	}
+	int GetShortestPathFromCache(Node* ToNode)
+	{
+		auto it = Cache.find(ToNode);
+		if (it == Cache.end())
+			return -1;
+		return it->second;
+	}
+	int RegisterShortestPathFromCache(Node* ToNode, int dist)
+	{
+		Cache.emplace(ToNode, dist);
+	}
+
+	int ShortestPathLength(Node* ToNode)
+	{
+		// Simplified version of Bellman-Ford algorithm : Valid for DAGs with positive distances.
+		// Dynamic programming
+
+		if (this == ToNode)
+			return 0;
+
+		if (Successors.empty())
+			return INT_MAX;
+
+		int MinLength = INT_MAX;
+		for (Node* SuccessorNode : Successors)
+		{
+			// memoization, cache
+			int dist = 0;
+			int SPL = SuccessorNode->GetShortestPathFromCache(ToNode);
+			if (SPL > 0)
+			{
+				dist = SPL;
+			}
+			else
+			{
+				dist = ShortestPathLength(ToNode);
+				SuccessorNode->RegisterShortestPathFromCache(ToNode, dist);
+			}
+
+			if (dist != INT_MAX)
+			{
+				Arc* pA = pG->GetArc(this, SuccessorNode);
+				auto PL = pA->GetDistance() + dist;
+				if (PL < MinLength)
+					MinLength = PL;
+			}
+		}
+		return MinLength;
+	}
+
 };
 
 class Arc
 {
 	Node* FromNode;
 	Node* ToNode;
+	Graph* pG;
 
 	int Distance;
+
 public:
-	Arc(Node* F, Node* T, int d, Graph& g) : FromNode(F), ToNode(T), Distance(d)
+	Arc(Node* F, Node* T, int d, Graph& g) : FromNode(F), ToNode(T), pG(&g), Distance(d)
 	{
-		g.AddArc(this);
+		g.AddArc(F, T, this);
+		F->AddSuccessor(T);
 	}
+	int GetDistance() { return Distance; }
 };
 
 int main()
 {
-	// Node is a class == a concept.
-	// n1 is an object == an instance of class (concept) Node
-	// Node does not physically exist. It is an idea.
-	// n1 exists. It has an address in memory.
-
 	Graph g;
-	Node n1(0, g);
-	Node n2(1, g);
-	Node n3(2, g);
-	Node n4(3, g);
-	Node n5(4, g);
-	Node n6(5, g);
 
-	Arc a1(&n1, &n2, 10, g);
-	Arc a2(&n1, &n3, 5, g);
+	Node n0(0, g);
+	Node n1(1, g);
+	Node n2(2, g);
+	Node n3(3, g);
+	Node n4(4, g);
+	Node n5(5, g);
 
-	int pathlength = g.ShortestPathLength(n1, n6);
+	Arc a0(&n0, &n1, 5, g);
+	Arc a1(&n1, &n2, 4, g);
+	Arc a2(&n1, &n3, 2, g);
+	Arc a3(&n2, &n3, 3, g);
+	Arc a4(&n3, &n4, 4, g);
+	Arc a5(&n3, &n5, 2, g);
+	Arc a6(&n4, &n5, 1, g);
+
+	int pathlength = n1.ShortestPathLength(&n5);
 
 	return 1;
 }
 
-
-
-
-
-//
-//
-//int ShortestPathLength(int FromNode, int ToNode, map< pair<int, int>, int >& Distance, 
-//	vector< vector<int> >& Successors, 
-//	map< pair<int, int>, int >& Cache)
-//{
-//	// Simplified version of Bellman-Ford algorithm : Valid for DAGs with positive distances.
-//	// Dynamic programming
-//
-//	if (FromNode == ToNode)
-//		return 0;
-//
-//	if (Successors[FromNode].empty())
-//		return INT_MAX;
-//
-//	int MinLength = INT_MAX;
-//	for (int SuccessorNode : Successors[FromNode])
-//	{
-//		// memoization, cache
-//		int dist = 0;
-//		auto it = Cache.find({ SuccessorNode, ToNode });
-//		if (it != Cache.end())
-//		{
-//			dist = it->second;
-//		}
-//		else
-//		{
-//			dist = ShortestPathLength(SuccessorNode, ToNode, Distance, Successors, Cache);
-//			Cache.emplace(pair<int, int>(SuccessorNode, ToNode), dist);
-//		}
-//
-//		if (dist != INT_MAX)
-//		{
-//			auto PL = Distance[{FromNode, SuccessorNode}] + dist;
-//			if (PL < MinLength)
-//				MinLength = PL;
-//		}
-//	}
-//	return MinLength;
-//}
-//
-//void CreateSuccessorsFromDistanceMap(map< pair<int, int>, int >& Distance, vector< vector<int> >& Successors)
-//{
-//	int MaxNode = 0;
-//	for (auto it = Distance.begin(); it != Distance.end(); ++it)
-//	{
-//		auto p = it->first;
-//
-//		if (MaxNode < p.first)
-//			MaxNode = p.first;
-//		if (MaxNode < p.second)
-//			MaxNode = p.second;
-//	}
-//	Successors.resize(MaxNode + 1);
-//	for (auto it = Distance.begin(); it != Distance.end(); ++it)
-//	{
-//		auto p = it->first;
-//		Successors[p.first].push_back(p.second);
-//	}
-//}
-//
-//int main()
-//{
-//	map< pair<int, int>, int > Distance =
-//	{
-//		// {fromnode, tonode}, distance
-//
-//		{{0, 1}, 5},
-//		{{1, 2}, 4},
-//		{{1, 3}, 2},
-//		{{2, 3}, 5},
-//		{{3, 4}, 4},
-//		{{3, 5}, 200},
-//		{{4, 5}, 1}
-//	};
-//	map< pair<int, int>, int > Cache;
-//
-//	vector< vector<int> > Successors;
-//	CreateSuccessorsFromDistanceMap(Distance, Successors);
-//	//	=
-//	//{
-//	//	 vector of successor nodes
-//	//	{1},
-//	//	{2, 3},
-//	//	{3},
-//	//	{4, 5},
-//	//	{5},
-//	//	{}
-//	//};
-//
-//	auto d = ShortestPathLength(0, 5, Distance, Successors, Cache);
-//	cout << d;
-//
-//	return 0;
-//}
