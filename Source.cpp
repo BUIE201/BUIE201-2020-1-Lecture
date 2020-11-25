@@ -55,7 +55,7 @@ public:
 			return -1;
 		return it->second;
 	}
-	int RegisterShortestPathFromCache(Node* ToNode, int dist)
+	void RegisterShortestPathFromCache(Node* ToNode, int dist)
 	{
 		Cache.emplace(ToNode, dist);
 	}
@@ -83,7 +83,7 @@ public:
 			}
 			else
 			{
-				dist = ShortestPathLength(ToNode);
+				dist = SuccessorNode->ShortestPathLength(ToNode);
 				SuccessorNode->RegisterShortestPathFromCache(ToNode, dist);
 			}
 
