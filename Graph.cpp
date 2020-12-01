@@ -49,14 +49,20 @@ void Graph::LoadNodes(ifstream& is)
 
 void Graph::LoadArcs(ifstream& is)
 {
-	int nNodes;
-	is >> nNodes;
+	int nArcs;
+	is >> nArcs;
 
-	for (int i = 0; i < nNodes; i++)
+	for (int i = 0; i < nArcs; i++)
 	{
-		int ID;
-		is >> ID;
-		new Node(ID, *this);
+		int FromNodeID;
+		int ToNodeID;
+		int Distance;
+
+		is >> FromNodeID >> ToNodeID >> Distance;
+		Node* pFromNode = GetNode(FromNodeID);
+		Node* pToNode = GetNode(ToNodeID);
+		if (pFromNode && pToNode)
+			new Arc(pFromNode, pToNode, Distance, *this);
 	}
 }
 
