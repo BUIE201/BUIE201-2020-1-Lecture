@@ -2,11 +2,6 @@
 #include "Node.h"
 #include "Arc.h"
 
-#include <vector>
-#include <map>
-
-using namespace std;
-
 
 Node::Node(int IDIn, Graph& g) : ID(IDIn), pG(&g)
 {

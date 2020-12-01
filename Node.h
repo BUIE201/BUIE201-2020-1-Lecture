@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <map>
 
@@ -5,7 +7,6 @@ using namespace std;
 
 //Forward declaration
 class Graph;
-class Arc;
 
 class Node
 {
