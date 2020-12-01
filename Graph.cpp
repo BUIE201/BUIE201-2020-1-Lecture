@@ -3,6 +3,13 @@
 #include "Arc.h"
 
 
+Node* Graph::GetNode(int NodeID)
+{
+	if (NodeID < 0 || NodeID >= Nodes.size())
+		return nullptr;
+
+	return Nodes[NodeID];
+}
 
 void Graph::AddNode(Node* p)
 {

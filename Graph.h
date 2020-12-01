@@ -14,6 +14,7 @@ class Graph
 	map<pair<Node*, Node*>, Arc*> Arcs;
 
 public:
+	Node* GetNode(int NodeID);
 	void AddNode(Node* p);
 	void AddArc(Node* FromNode, Node* ToNode, Arc* p);
 	Arc* GetArc(Node* FromNode, Node* ToNode);
