@@ -26,6 +26,7 @@ class Graph
 	void LoadGraphFromFile(string& FileName);
 public:
 	Graph(string FileName);
+	~Graph();
 
 	void AddNode(Node* p);
 	void AddArc(Node* FromNode, Node* ToNode, Arc* p);

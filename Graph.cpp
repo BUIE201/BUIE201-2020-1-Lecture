@@ -14,6 +14,18 @@ Graph::Graph(string FileName): pSourceNode(nullptr), pTerminationNode(nullptr)
 			pTerminationNode = pN;
 	}
 }
+Graph::~Graph()
+{
+	for (auto pNode : Nodes)
+	{
+		delete pNode;
+	}
+	for (auto p : Arcs)
+	{
+		delete p.second;
+	}
+}
+
 
 Node* Graph::GetNode(int NodeID)
 {
