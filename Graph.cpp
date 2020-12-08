@@ -3,9 +3,16 @@
 #include "Arc.h"
 
 
-Graph::Graph(string FileName)
+Graph::Graph(string FileName): pSourceNode(nullptr), pTerminationNode(nullptr)
 {
 	LoadGraphFromFile(FileName);
+	for (auto pN : Nodes)
+	{
+		if (pN->IsASourceNode())
+			pSourceNode = pN;
+		if (pN->IsATerminationNode())
+			pTerminationNode = pN;
+	}
 }
 
 Node* Graph::GetNode(int NodeID)

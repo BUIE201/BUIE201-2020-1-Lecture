@@ -3,13 +3,14 @@
 #include "Arc.h"
 
 
-Node::Node(int IDIn, Graph& g) : ID(IDIn), pG(&g)
+Node::Node(int IDIn, Graph& g) : ID(IDIn), pG(&g), bIsASourceNode(true)
 {
 	g.AddNode(this);
 }
 void Node::AddSuccessor(Node* p)
 {
 	Successors.push_back(p);
+	p->NotASourceNode();
 }
 int Node::GetShortestPathFromCache(Node* ToNode)
 {

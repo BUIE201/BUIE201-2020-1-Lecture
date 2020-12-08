@@ -6,13 +6,16 @@
 
 int main()
 {
-	Graph g("input.txt");
+	while (true)
+	{
+		Graph g("input.txt");
 
-	//auto pSourceNode = g.GetSourceNode();
-	//auto pTerminationNode = g.GetTerminationNode();
+		auto pSourceNode = g.GetSourceNode();
+		auto pTerminationNode = g.GetTerminationNode();
 
-	//if (pSourceNode && pTerminationNode)
-	//	cout << pSourceNode->ShortestPathLength(pTerminationNode);
+		if (pSourceNode && pTerminationNode)
+			cout << pSourceNode->ShortestPathLength(pTerminationNode);
+	}
 
 	return 1;
 }

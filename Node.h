@@ -14,6 +14,7 @@ class Node
 	vector<Node*> Successors;
 	map<Node*, int> Cache;
 	Graph* pG;
+	bool bIsASourceNode;
 
 public:
 	// Constructor
@@ -22,4 +23,7 @@ public:
 	int GetShortestPathFromCache(Node* ToNode);
 	void RegisterShortestPathFromCache(Node* ToNode, int dist);
 	int ShortestPathLength(Node* ToNode);
+	void NotASourceNode() { bIsASourceNode = false; }
+	bool IsASourceNode() { return bIsASourceNode; }
+	bool IsATerminationNode() { return Successors.empty(); }
 };

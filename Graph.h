@@ -12,6 +12,9 @@ class Arc;
 
 class Graph
 {
+	Node* pSourceNode;
+	Node* pTerminationNode;
+
 	vector<Node*> Nodes;
 	map<pair<Node*, Node*>, Arc*> Arcs;
 
@@ -27,6 +30,9 @@ public:
 	void AddNode(Node* p);
 	void AddArc(Node* FromNode, Node* ToNode, Arc* p);
 	Arc* GetArc(Node* FromNode, Node* ToNode);
+
+	Node* GetSourceNode() { return pSourceNode; }
+	Node* GetTerminationNode() { return pTerminationNode; }
 
 };
 
