@@ -6,6 +6,7 @@
 Shape::Shape(COORDINATE BaseIn, int SpeedIn, int colorIn) : Base(BaseIn), Speed(SpeedIn), color(colorIn)
 {
 	SpeedCounter=0;
+
 }
 
 void Shape::Erase(Console& c)
