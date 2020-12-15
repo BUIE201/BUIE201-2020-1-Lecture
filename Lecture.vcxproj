@@ -33,6 +33,9 @@
     <ClInclude Include="Square.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="class diagram.drawio" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
