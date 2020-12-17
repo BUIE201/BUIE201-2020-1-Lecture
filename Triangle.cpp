@@ -13,10 +13,12 @@ bool Triangle::IsDead()
 
 void Triangle::Draw(Console& c, char ch, int color)
 {
-	for(int i = Base.x; i <= Base.x + Length; i++)
-		for(int j = Base.y - (i - Base.x); j <= Base.y + (i - Base.x); j++)
+	for (int i = Base.x; i <= Base.x + Length; i++)
+	{
+		for (int j = Base.y - (i - Base.x); j <= Base.y + (i - Base.x); j++)
 		{
 			c.SetColor(j, i, color);
 			c.PrintChar(j, i, ch);
 		}
+	}
 }

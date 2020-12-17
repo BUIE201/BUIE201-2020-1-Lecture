@@ -13,11 +13,13 @@ bool Square::IsDead()
 
 void Square::Draw(Console& c, char ch, int color)
 {
-	for(int i = Base.x; i <= Base.x + Length; i++)// i DA ASAGÝ DOGRU YAZDÝRÝYO
-		for(int j = Base.y; j <= Base.y + Length; j++) //J-> SOLA DOGRU YAZDIRAN
+	for (int i = Base.x; i <= Base.x + Length; i++)
+	{
+		for (int j = Base.y; j <= Base.y + Length; j++)
 		{
 			c.SetColor(j, i, color);
 			c.PrintChar(j, i, ch);
 		}
+	}
 }
 

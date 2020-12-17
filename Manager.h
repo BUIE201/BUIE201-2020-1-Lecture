@@ -1,15 +1,19 @@
 #pragma once
 
 #include "console.h"
+#include <vector>
+
+using namespace std;
+
 class Shape;
 
 class Manager
 {
 	Console c;
-	Shape** MyShapes;
+	vector<Shape*> MyShapes;
 	double Speed;
 
-	void CreateNewShape(int i);
+	void CreateNewShape(Shape*& pShape);
 	void UpdateGameSpeed(char ch);
 
 public:

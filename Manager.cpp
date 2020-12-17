@@ -17,23 +17,23 @@
 Manager::Manager()
 {
 	Speed = 1.0;
-	MyShapes = new Shape*[MaxObj];
-	for(int h=0; h < MaxObj; h++)
-		MyShapes[h] = NULL;
-	for(int h=0; h < MaxObj; h++)
-		CreateNewShape(h);
+
+	MyShapes.resize(MaxObj, nullptr);
+	for (auto& pShape : MyShapes)
+		CreateNewShape(pShape);
 }
 
 Manager::~Manager()
 {
-	for(int i = 0; i < MaxObj; i++)	
-		delete MyShapes[i];
-	delete[] MyShapes;
+	for(auto pShape : MyShapes)	
+		delete pShape;
 }
 
-void Manager::CreateNewShape(int i)
+void Manager::CreateNewShape(Shape*& pShape)
 {
-	Shape* pShape;
+	if (pShape)
+		delete pShape;
+
 	if (rand() % 2 == 0)
 		pShape = new Square(COORDINATE(0, (rand()%MaxY)), ((rand()%MaxSpeed)+1), 
 			c.rgb_b(rand()%2,rand()%2,rand()%2,rand()%2) | c.rgb_f(rand()%2,rand()%2,rand()%2,rand()%2), 
@@ -42,17 +42,13 @@ void Manager::CreateNewShape(int i)
 		pShape = new Triangle(COORDINATE(0, (rand()%MaxY)), ((rand()%MaxSpeed)+1), 
 			c.rgb_b(rand()%2,rand()%2,rand()%2,rand()%2) | c.rgb_f(rand()%2,rand()%2,rand()%2,rand()%2), 
 			((rand()%MaxLength)+1));
-	if (MyShapes[i]) 
-		delete MyShapes[i];
-	
-	MyShapes[i] = pShape;
 }
 
 void Manager::Run()
 {
 	while(true)
 	{
-		Sleep(5);
+		Sleep(1);
 
 		if (_kbhit())
 		{
@@ -60,11 +56,11 @@ void Manager::Run()
 			UpdateGameSpeed(ch);
 		}
 		
-		for(int i = 0; i < MaxObj; i++)	
+		for (auto& pShape : MyShapes)
 		{
-			MyShapes[i]->Drop(Speed, c);
-			if (MyShapes[i]->IsDead())
-				CreateNewShape(i);
+			pShape->Drop(Speed, c);
+			if (pShape->IsDead())
+				CreateNewShape(pShape);
 		}
 	}
 }
