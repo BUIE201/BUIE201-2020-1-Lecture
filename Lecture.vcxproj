@@ -19,22 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="dessert.cpp" />
+    <ClCompile Include="dish.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Manager.cpp" />
-    <ClCompile Include="Shape.cpp" />
-    <ClCompile Include="Square.cpp" />
-    <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="meat.cpp" />
+    <ClCompile Include="order.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Console.h" />
-    <ClInclude Include="Manager.h" />
-    <ClInclude Include="Shape.h" />
-    <ClInclude Include="Square.h" />
-    <ClInclude Include="Triangle.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="class diagram.drawio" />
+    <ClInclude Include="dessert.h" />
+    <ClInclude Include="dish.h" />
+    <ClInclude Include="meat.h" />
+    <ClInclude Include="order.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
