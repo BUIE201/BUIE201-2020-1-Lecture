@@ -4,8 +4,15 @@
 
 int main()
 {
-	ORDER o1;
+	ORDER o1; // +		&o1	-> 0x000000f8708ff568 an address in stack
+
+	
 	auto pM1 = new MEAT(10); // Parameter is the cost of the dish.
+
+	// MEAT -> +		pM1's value 0x000002da5e522850 an address in heap
+	// &pM1	0x000000f8708ff5a8 an address in stack
+
+
 	auto pM2 = new MEAT(20); // Parameter is the cost of the dish.
 	auto pD1 = new DESSERT(4); // Parameter is the cost of the dish.
 	o1.AddItem(pM1);
