@@ -19,7 +19,10 @@ void ORDER::PrintORDER()
 		if (Total > 0)
 			cout << ", ";
 
-		pD->PrintDISH();
+		pD->PrintDISH(); // polymorphic call
+		// this function must be virtual.
+		// sub classes can "override" the function.
+
 		Total += pD->GetCost();
 	}
 	cout << ", TOTAL = " << Total << "TL." << endl;

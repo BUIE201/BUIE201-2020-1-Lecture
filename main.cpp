@@ -15,3 +15,23 @@ int main()
 
 	return 1;
 }
+// do not use ifs and function overloading.
+
+
+
+
+// first line creates a local variable named o1. so ORDER must be a class.
+// 2-4 lines creates dynamic variables. so MEAT and DESSERT must be classes.
+// the paranthesis and the values that comes after the class names must be calls to their constructors.
+// through the explanation provided I know that MEAT and DESSERT both have cost attributes.
+
+// line 5-6. AddItem must be a public function of the ORDER class. Parameter of this function 
+// should be a pointer to a MEAT
+
+// line 7. AddItem must be a public function of the ORDER class. Parameter of this function 
+// should be a pointer to a DESSERT
+
+// FIRST OPTION: We could have used function overloading: have two separate functions with to input types.
+
+// SECOND OPTION: Create a class called DISH which is a base class for MEAT and DESSERT.
+// Now, ORDER::AddItem can have a DISH* parameter.

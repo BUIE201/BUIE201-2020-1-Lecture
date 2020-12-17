@@ -6,6 +6,6 @@ class MEAT: public DISH
 {
 public:
 	MEAT(int CostIn);
-	void PrintDISH();
+	void PrintDISH(); // this is an override of the virtual function in DISH
 };
 

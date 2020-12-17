@@ -6,6 +6,7 @@ class DISH
 
 public:
 	DISH(int CostIn);
+
 	virtual void PrintDISH();
 	int GetCost();
 };
