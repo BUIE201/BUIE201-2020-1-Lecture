@@ -19,17 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dessert.cpp" />
-    <ClCompile Include="dish.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="meat.cpp" />
-    <ClCompile Include="order.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="dessert.h" />
-    <ClInclude Include="dish.h" />
-    <ClInclude Include="meat.h" />
-    <ClInclude Include="order.h" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -129,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
