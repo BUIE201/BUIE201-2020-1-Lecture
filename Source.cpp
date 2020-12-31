@@ -1,79 +1,184 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 
-class IntVector201
+class MyData
 {
-	int Capacity;
-	int Size;
-	int* pData;
-
-	void Expand()
-	{
-		int NewCapacity = Capacity == 0 ? 10 : Capacity + (Capacity / 2);
-		int* pNewData = new int[NewCapacity];
-		for (int i = 0; i < size(); i++)
-		{
-			pNewData[i] = pData[i];
-		}
-		Capacity = NewCapacity;
-		pData = pNewData;
-	}
+	string Name;
+	int i;
 
 public:
-	IntVector201() : pData(nullptr), Capacity(0), Size(0) {}
-	IntVector201(int InitialSize, int DefaultValue = 0) : Capacity(InitialSize), Size(InitialSize)
-	{
-		pData = new int[Capacity];
-		for (int i = 0; i < Size; i++)
-		{
-			pData[i] = DefaultValue;
-		}
-	}
+	MyData() : i(-1) {}
+	MyData(int x, string NameIn) : i(x), Name(NameIn) {}
+	MyData(int x) : i(x) {}
 
-	int capacity() { return Capacity; }
-	int size() { return Size; }
-	void push_back(int x)
-	{
-		if (Capacity <= Size)
-			Expand();
-		pData[Size] = x;
-		Size++;
-	}
-	int& operator[](int i)
-	{
-		// See what happens if i is out of bounds. (i >= Capacity)
-		// See what happens if return type is "int" instead of "int&".
+	static MyData null() { return MyData(); }
+	bool IsNull() { return i == -1; }
 
-		return pData[i];
+	bool operator==(MyData& d)
+	{
+		return i == d.i;
 	}
-
-	friend ostream& operator<<(ostream& os, IntVector201& d);
+	friend ostream& operator<<(ostream& os, MyData& d);
 };
 
-ostream& operator<<(ostream& os, IntVector201& d)
+ostream& operator<<(ostream& os, MyData& d)
 {
-	for (int i = 0; i < d.size(); i++)
-	{
-		if (i > 0)
-			os << ", ";
-		os << d[i];
-	}
+	if (d.IsNull())
+		os << "null";
+	else
+		os << d.Name << ":" << d.i;
 	return os;
 }
 
+template <typename T> class ListNode
+{
+public:
+	T data;
+	shared_ptr<ListNode> Next;
+
+	ListNode(T d) : data(d), Next(nullptr) {}
+	bool operator==(ListNode& o)
+	{
+		return data == o.data;
+	}
+};
+
+template <typename T> class List
+{
+	shared_ptr< ListNode<T> > Head{ nullptr };
+	shared_ptr< ListNode<T> > Tail{ nullptr };
+
+	void InsertToListAsHead(shared_ptr< ListNode<T> > NewListNode)
+	{
+		if (Head)
+			NewListNode->Next = Head;
+		else
+			Tail = NewListNode;
+
+		Head = NewListNode;
+	}
+
+	void InsertToListAsTail(shared_ptr< ListNode<T> > NewListNode)
+	{
+		if (Tail)
+			Tail->Next = NewListNode;
+		else
+			Head = NewListNode;
+
+		Tail = NewListNode;
+	}
+
+	void PrintList(shared_ptr< ListNode<T> > LocalHead)
+	{
+		if (!LocalHead)
+			return;
+
+		if (LocalHead != Head)
+			cout << " -> ";
+		cout << LocalHead->data;
+
+		PrintList(LocalHead->Next);
+	}
+
+	void DeleteNodeWithTwoChildren(shared_ptr< ListNode<T> >& q, shared_ptr< ListNode<T> >& p)
+	{
+		if (p->Right)
+		{
+			DeleteNodeWithTwoChildren(q, p->Right);
+			return;
+		}
+
+		p->data = q->data;
+		q = p;
+		p = p->Left;
+	}
+
+	void DeleteNodeFromList(shared_ptr< ListNode<T> > n, T d)
+	{
+		shared_ptr< ListNode<T> > ProspectNode = (n == nullptr ? Head : n->Next);
+
+		if (ProspectNode->data == d)
+		{
+			if (n == nullptr)
+				Head = Head->Next;
+			else
+				n->Next = (n->Next ? n->Next->Next : nullptr);
+			return;
+		}
+
+		DeleteNodeFromList(ProspectNode, d);
+	}
+
+	T FindInList(shared_ptr< ListNode<T> > LocalHead, T d)
+	{
+		if (!LocalHead)
+			return T::null();
+
+		if (LocalHead->data == d)
+			return LocalHead->data;
+
+		return FindInList(LocalHead->Next, d);
+	}
+
+public:
+
+	void InsertToHead(T d)
+	{
+		InsertToListAsHead(make_shared< ListNode<T> >(d));
+	}
+	void InsertToTail(T d)
+	{
+		InsertToListAsTail(make_shared< ListNode<T> >(d));
+	}
+	void Delete(T d)
+	{
+		DeleteNodeFromList(nullptr, d);
+	}
+	T Find(T d)
+	{
+		return FindInList(Head, d);
+	}
+	void Print()
+	{
+		PrintList(Head);
+	}
+};
+
 void main()
 {
-	IntVector201 v1;
-	v1.push_back(3);
-	v1.push_back(5);
+	vector<pair<int, string>> v{ {3, "a"}, {5, "b"}, {2, "c"} };
 
-	cout << v1 << endl;
+	List<MyData> t;
+	for (auto [i, name] : v)
+	{
+		t.InsertToHead({ i, name });
+	}
+	t.Print();
 
-	IntVector201 v2(1);
-	v2[0] = 7;
-	v2.push_back(8);
+	cout << endl << endl;
 
-	cout << v2[0]<< endl;
+	List<MyData> t2;
+	for (auto [i, name] : v)
+	{
+		t2.InsertToTail({ i, name });
+	}
+	t2.Print();
+
+	cout << endl << endl;
+
+	t2.Delete(2);
+	t2.Print();
+
+	cout << endl << endl;
+
+	auto x = t2.Find(3);
+	cout << x;
+
+	cout << endl << endl;
+
+	auto y = t2.Find(30);
+	cout << y;
 }
