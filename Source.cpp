@@ -41,8 +41,11 @@ public:
 		pData[Size] = x;
 		Size++;
 	}
-	int& GetElement(int i)
+	int& operator[](int i)
 	{
+		// See what happens if i is out of bounds. (i >= Capacity)
+		// See what happens if return type is "int" instead of "int&".
+
 		return pData[i];
 	}
 
@@ -55,7 +58,7 @@ ostream& operator<<(ostream& os, IntVector201& d)
 	{
 		if (i > 0)
 			os << ", ";
-		os << d.GetElement(i);
+		os << d[i];
 	}
 	return os;
 }
@@ -69,8 +72,8 @@ void main()
 	cout << v1 << endl;
 
 	IntVector201 v2(1);
-	v2.GetElement(0) = 7;
+	v2[0] = 7;
 	v2.push_back(8);
 
-	cout << v2.GetElement(0) << endl;
+	cout << v2[0]<< endl;
 }
