@@ -1,100 +1,74 @@
 #include <iostream>
-#include <string>
-#include <vector>
-#include <map>
 
 using namespace std;
 
-class AIRCRAFT;
 
-class AIRLINE
+class IntVector201
 {
-	string Name;
-	map<string, int> AIRCRAFTsByBrand;
-	vector<AIRCRAFT*> AIRCRAFTs;
+	int Capacity;
+	int Size;
+	int* pData;
+
+	void Expand()
+	{
+		int NewCapacity = Capacity == 0 ? 10 : Capacity + (Capacity / 2);
+		int* pNewData = new int[NewCapacity];
+		for (int i = 0; i < size(); i++)
+		{
+			pNewData[i] = pData[i];
+		}
+		Capacity = NewCapacity;
+		pData = pNewData;
+	}
 
 public:
-	AIRLINE(string NameIn) : Name(NameIn) {}
-	void AddAircraft(AIRCRAFT* pA);
-	void RegisterAircraftBrand(string Brand)
+	IntVector201() : pData(nullptr), Capacity(0), Size(0) {}
+	IntVector201(int InitialSize, int DefaultValue = 0) : Capacity(InitialSize), Size(InitialSize)
 	{
-		auto [it, inserted] = AIRCRAFTsByBrand.emplace(Brand, 1);
-		if (!inserted)
-			it->second++;
+		pData = new int[Capacity];
+		for (int i = 0; i < Size; i++)
+		{
+			pData[i] = DefaultValue;
+		}
 	}
-	void Print();
-};
 
-class AIRCRAFT
-{
-	int id;
-public:
-	AIRCRAFT(int idIn) : id(idIn) {}
-
-	virtual void Print() 
+	int capacity() { return Capacity; }
+	int size() { return Size; }
+	void push_back(int x)
 	{
-		cout << id;
+		if (Capacity <= Size)
+			Expand();
+		pData[Size] = x;
+		Size++;
 	}
-	virtual void RegisterBrandToAirline(AIRLINE* pAL) = 0;
-};
-
-class BOEING: public AIRCRAFT
-{
-public:
-
-	BOEING(int id) : AIRCRAFT(id) 
+	int& GetElement(int i)
 	{
+		return pData[i];
 	}
-	void RegisterBrandToAirline(AIRLINE* pAL)
-	{
-		pAL->RegisterAircraftBrand("BOEING");
-	}
-};
 
-class AIRBUS : public AIRCRAFT
-{
-public:
-
-	AIRBUS(int id) : AIRCRAFT(id)
+	void Print(ostream& os)
 	{
-	}
-	void RegisterBrandToAirline(AIRLINE* pAL)
-	{
-		pAL->RegisterAircraftBrand("AIRBUS");
+		for (int i = 0; i < Size; i++)
+		{
+			if (i > 0)
+				os << ", ";
+			os << pData[i];
+		}
 	}
 };
 
-void AIRLINE::AddAircraft(AIRCRAFT* pA)
+void main()
 {
-	AIRCRAFTs.push_back(pA);
-	pA->RegisterBrandToAirline(this);
-}
+	IntVector201 v1;
+	v1.push_back(3);
+	v1.push_back(5);
 
-void AIRLINE::Print()
-{
-	cout << Name << " has ";
-	for (auto [Brand, count] : AIRCRAFTsByBrand)
-	{
-		cout << count << " " << Brand << " and ";
-	}
-	cout << "aircrafts. IDs of the aircraft are: ";
-	for (auto pA : AIRCRAFTs)
-	{
-		pA->Print();
-		cout << " ";
-	}
-}
+	v1.Print(cout);
 
-int main()
-{
-	AIRLINE* pAL = new AIRLINE("THY");
-	pAL->AddAircraft(new BOEING(11)); // Parameter is the id of the aircraft.
-	pAL->AddAircraft(new AIRBUS(22)); // Parameter is the id of the aircraft. 
-	BOEING b(33);
-	pAL->AddAircraft(&b);
+	IntVector201 v2(1);
+	v2.GetElement(0) = 7;
+	v2.push_back(8);
 
-	pAL->Print();// Output should read 
-  // THY has 2 BOEING and 1 AIRBUS aircrafts. IDs of the aircraft are: 11 22 33
+	v1.Print(cout);
 
-	return 1;
 }
