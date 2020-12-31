@@ -46,16 +46,19 @@ public:
 		return pData[i];
 	}
 
-	void Print(ostream& os)
-	{
-		for (int i = 0; i < Size; i++)
-		{
-			if (i > 0)
-				os << ", ";
-			os << pData[i];
-		}
-	}
+	friend ostream& operator<<(ostream& os, IntVector201& d);
 };
+
+ostream& operator<<(ostream& os, IntVector201& d)
+{
+	for (int i = 0; i < d.size(); i++)
+	{
+		if (i > 0)
+			os << ", ";
+		os << d.GetElement(i);
+	}
+	return os;
+}
 
 void main()
 {
@@ -63,12 +66,11 @@ void main()
 	v1.push_back(3);
 	v1.push_back(5);
 
-	v1.Print(cout);
+	cout << v1 << endl;
 
 	IntVector201 v2(1);
 	v2.GetElement(0) = 7;
 	v2.push_back(8);
 
-	v1.Print(cout);
-
+	cout << v2.GetElement(0) << endl;
 }
